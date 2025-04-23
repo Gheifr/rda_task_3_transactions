@@ -1,22 +1,8 @@
-
 USE ShopDB; 
-
-
 INSERT INTO Orders (CustomerID, Date) VALUES (1, '2023-01-01');
 SET @order_id = LAST_INSERT_ID();
-
-update Products set WarehouseAmount = @current_amount - 1 where Name = 'AwersomeProduct';
-
+SET @current_amount = (SELECT WarehouseAmount FROM Products WHERE Name = 'AwersomeProduct');
+UPDATE Products SET WarehouseAmount = @current_amount - 1 WHERE ID = 1;
 START TRANSACTION; 
-
-SET @current_amount = (select WarehouseAmount from Products where Name = 'AwersomeProduct');
-INSERT INTO OrderItems (OrderId, ProductId, Count) VALUES (
-			@order_id,
-			(SELECT id FROM Products WHERE Name = 'AwersomeProduct'),
-			1);
-            
-            
+INSERT INTO OrderItems (OrderId, ProductId, Count) VALUES (@order_id,1,1);
 COMMIT; 
-
-
-
